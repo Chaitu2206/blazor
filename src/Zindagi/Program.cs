@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Zindagi.Infra.Data;
 
 namespace Zindagi
 {
@@ -23,7 +24,7 @@ namespace Zindagi
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().MigrateDatabase<ZindagiDbContext>().Run();
             }
             catch (Exception ex)
             {
