@@ -1,0 +1,39 @@
+@page "/accepted-requests"
+@attribute [Authorize]
+@inject IBloodRequestRepository _bloodRequestRepository
+
+
+<h4 class="m-4 text-center">My Requests</h4>
+
+<div class="container">
+    <TelerikGrid Data="@_requests" OnRowClick="OnSelection">
+        <GridColumns>
+            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.RequestId))" Visible="false">
+            </GridColumn>
+            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.PatientName))" Title="Patient Name">
+            </GridColumn>
+            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.BloodGroup))" Title="Blood Group">
+            </GridColumn>
+            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.DonationType))" Title="Donation Type">
+            </GridColumn>
+            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.QuantityInUnits))" Title="Unit(s)">
+            </GridColumn>
+        </GridColumns>
+    </TelerikGrid>
+</div>
+
+@code {
+    private List<BloodRequestDto> _requests = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _requests = await _bloodRequestRepository.GetAcceptedBloodRequests(await _loggedInUser.GetSerialNumber());
+    }
+
+    private void OnSelection(GridRowClickEventArgs args)
+    {
+        if (args.Item is BloodRequestDto item)
+            _navManager.NavigateTo($"blood-donation-request/{item.Id}");
+    }
+
+}

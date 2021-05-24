@@ -1,0 +1,121 @@
+@page "/blood-donation-request/{RequestId:long}"
+@attribute [Authorize]
+
+<h4 class="m-4 text-center">Request Details</h4>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-lg-8 mx-auto">
+            <table class="table table-hover table-borderless">
+                <tbody>
+                    <tr>
+                        <th scope="row">Patient Name</th>
+                        <td>@_request.PatientName</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Reason</th>
+                        <td>@_request.Reason</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Blood Group</th>
+                        <td>@_request.BloodGroup.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Unit(s)</th>
+                        <td>@_request.QuantityInUnits</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Donation Type</th>
+                        <td>@_request.DonationType.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Priority</th>
+                        <td>@_request.Priority.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Status</th>
+                        <td>@_request.Status.Name</td>
+                    </tr>
+                    <tr>
+                        <th scope="row" colspan="2">
+                            <div class="text-center">
+                                @if (_request.Status.IsOpen() && _request.RequestorId != _userId)
+                                {
+                                    <TelerikButton OnClick="AssignRequest" ButtonType="ButtonType.Button" Primary="true">Assign to Me</TelerikButton>
+                                }
+
+                                @if (_request.Status.AllowCancel() && _request.RequestorId == _userId)
+                                {
+                                    <TelerikButton OnClick="CancelRequest" Primary="false">Cancel</TelerikButton>
+                                }
+                            </div>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<TelerikNotification @ref="Notification"
+                     HorizontalPosition="NotificationHorizontalPosition.Right"
+                     VerticalPosition="NotificationVerticalPosition.Bottom">
+</TelerikNotification>
+
+@code {
+
+    [Parameter]
+    public long RequestId { get; set; }
+
+    private BloodRequestDto _request = null!;
+    private long _userId;
+    private TelerikNotification Notification { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userId = await _loggedInUser.GetSerialNumber();
+        _request = await _mediator.Send(new GetBloodRequest(RequestId));
+    }
+
+    async Task AssignRequest()
+    {
+        var result = await _mediator.Send(new AcceptBloodDonationRequest(RequestId, _userId));
+        if (result)
+        {
+            Notification.Show(new NotificationModel
+            {
+                Text = "Request assigned, thank you.",
+                ThemeColor = "success"
+            });
+        }
+        else
+        {
+            Notification.Show(new NotificationModel
+            {
+                Text = "Request not assigned, please try again.",
+                ThemeColor = "error"
+            });
+        }
+    }
+
+    async Task CancelRequest()
+    {
+        var result = await _mediator.Send(new CancelBloodDonationRequest(RequestId, _userId));
+        if (result)
+        {
+            Notification.Show(new NotificationModel
+            {
+                Text = "Request cancelled, thank you.",
+                ThemeColor = "success"
+            });
+        }
+        else
+        {
+            Notification.Show(new NotificationModel
+            {
+                Text = "Request not cancelled, please try again.",
+                ThemeColor = "error"
+            });
+        }
+    }
+}

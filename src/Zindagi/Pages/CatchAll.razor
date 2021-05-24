@@ -1,0 +1,10 @@
+﻿@page "/app/{*pageRoute}"
+
+<h3>Page not found - {@PageRoute}</h3>
+
+@code {
+
+    [Parameter]
+    public string PageRoute { get; set; } = "";
+
+}

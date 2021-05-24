@@ -1,0 +1,14 @@
+@page "/covid-19"
+@attribute [Authorize]
+
+
+<h3>COVID-19</h3>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        _navManager.NavigateTo("/dashboard");
+    }
+
+}
