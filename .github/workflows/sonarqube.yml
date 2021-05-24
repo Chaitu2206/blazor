@@ -4,8 +4,16 @@ on:
     branches:
       - main
       - release
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.yml'
   pull_request:
     types: [opened, synchronize, reopened]
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '**.yml'
 jobs:
   build:
     name: Build

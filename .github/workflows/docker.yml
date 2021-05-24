@@ -74,5 +74,6 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          docker push $IMAGE_NAME:$VERSION
-
+          IMAGE_ID=zindagi/$IMAGE_NAME
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
