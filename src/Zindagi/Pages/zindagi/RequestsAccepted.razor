@@ -8,15 +8,15 @@
 <div class="container">
     <TelerikGrid Data="@_requests" OnRowClick="OnSelection">
         <GridColumns>
-            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.RequestId))" Visible="false">
+            <GridColumn Field="@(nameof(BloodRequestDto.Id))" Visible="false">
             </GridColumn>
-            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.PatientName))" Title="Patient Name">
+            <GridColumn Field="@(nameof(BloodRequestDto.PatientName))" Title="Patient Name">
             </GridColumn>
-            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.BloodGroup))" Title="Blood Group">
+            <GridColumn Field="@(nameof(BloodRequestDto.BloodGroup))" Title="Blood Group">
             </GridColumn>
-            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.DonationType))" Title="Donation Type">
+            <GridColumn Field="@(nameof(BloodRequestDto.DonationType))" Title="Donation Type">
             </GridColumn>
-            <GridColumn Field="@(nameof(BloodRequestSearchRecordDto.QuantityInUnits))" Title="Unit(s)">
+            <GridColumn Field="@(nameof(BloodRequestDto.QuantityInUnits))" Title="Unit(s)">
             </GridColumn>
         </GridColumns>
     </TelerikGrid>

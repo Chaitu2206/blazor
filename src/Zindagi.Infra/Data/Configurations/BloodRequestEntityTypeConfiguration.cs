@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Zindagi.Domain;
 using Zindagi.Domain.RequestsAggregate;
 using Zindagi.Infra.Data.Converters;
 using Zindagi.SeedWork;
@@ -17,7 +16,6 @@ namespace Zindagi.Infra.Data.Configurations
             builder.Property(p => p.Id)
                 .HasColumnName("blood_request_id")
                 .HasValueGenerator<LongIdGenerator>()
-                .UseHiLo("global")
                 .ValueGeneratedNever();
 
             builder.Property(p => p.PatientName)

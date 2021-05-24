@@ -1,4 +1,3 @@
-#define SQLite
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -6,11 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog.Extensions.Logging;
-using StackExchange.Redis;
 using Zindagi.Domain.RequestsAggregate;
 using Zindagi.Domain.UserAggregate;
 using Zindagi.Infra.App;
-using Zindagi.Infra.BackgroundJobs;
 using Zindagi.Infra.Data;
 using Zindagi.Infra.JsonConverters;
 using Zindagi.Infra.Options;
@@ -30,18 +27,10 @@ namespace Zindagi.Infra
 
             services.AddDbContextFactory<ZindagiDbContext>(options =>
             {
-#if SQLite
                 options.UseSqlite($"Data Source={appOptions.DataDirectory}/zindagi.db", sqlOptions =>
                                       sqlOptions.MigrationsHistoryTable(ZindagiDbContext.MIGRATIONS)
                                           .CommandTimeout(120)
                                           .MaxBatchSize(10));
-#else
-
-                options.UseNpgsql(config.GetConnectionString("sql"), sqlOptions =>
-                                      sqlOptions.MigrationsHistoryTable(ZindagiDbContext.MIGRATIONS)
-                                          .CommandTimeout(120)
-                                          .MaxBatchSize(10));
-#endif
                 options
                     .EnableDetailedErrors(config.IsDevelopment())
                     .EnableSensitiveDataLogging(config.IsDevelopment())
@@ -51,13 +40,8 @@ namespace Zindagi.Infra
             }, ServiceLifetime.Transient);
 
 
-                services.AddScoped(p => p.GetRequiredService<IDbContextFactory<ZindagiDbContext>>().CreateDbContext());
+            services.AddScoped(p => p.GetRequiredService<IDbContextFactory<ZindagiDbContext>>().CreateDbContext());
 
-            var redisOptions = ConfigurationOptions.Parse(config.GetConnectionString("redis"));
-            services.AddSingleton(redisOptions);
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisOptions));
-
-            services.AddSignalR().AddStackExchangeRedis(config.GetConnectionString("redis"));
 
             var jsonOptions = new JsonSerializerOptions
             {
@@ -79,9 +63,6 @@ namespace Zindagi.Infra
             services.AddSingleton(smsOptions);
 
 
-
-            services.AddHostedService<NewRequestProcessingService>();
-
             // Singleton: creates a new instance only once during the application lifetime
             // Scoped: creates a new instance for every request
             // Transient: creates a new instance every time you request it
@@ -92,8 +73,6 @@ namespace Zindagi.Infra
 
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IBloodRequestRepository, BloodRequestRepository>();
-
-            services.AddTransient<IBloodRequestsSearchRepository, BloodRequestsSearchRepository>();
         }
     }
 }

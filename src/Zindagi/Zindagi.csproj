@@ -2,15 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>$(ApplicationTargetFramework)</TargetFramework>
-    <UserSecretsId>9e3394e0-8e1e-47df-91dd-f04a7ef80b3a</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.FluentValidation" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.17.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.17.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
-    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
     <PackageReference Include="Microsoft.Web.LibraryManager.Build" />
     <PackageReference Include="Telerik.UI.for.Blazor.Trial" />
   </ItemGroup>

@@ -42,10 +42,6 @@ namespace Zindagi.Application
             services.AddValidatorsFromAssemblies(new[] { DomainExtensions.Assembly(), InfraExtensions.Assembly(), Extensions.Assembly() });
 
             services.AddAuth0(config);
-
-            var appInsightsKey = config["appInsights:Key"];
-            if (appInsightsKey.IsNotNullOrWhiteSpace())
-                services.AddApplicationInsightsTelemetry(appInsightsKey);
         }
     }
 }

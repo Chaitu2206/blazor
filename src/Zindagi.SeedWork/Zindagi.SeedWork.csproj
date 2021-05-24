@@ -10,7 +10,6 @@
     <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="NodaTime" />
     <PackageReference Include="System.Text.Json" />
     <PackageReference Include="MailKit" />
   </ItemGroup>

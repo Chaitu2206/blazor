@@ -14,7 +14,6 @@ namespace Zindagi.Infra.Data.Configurations
             builder.Property(p => p.Id)
                 .HasColumnName("user_id")
                 .HasValueGenerator<LongIdGenerator>()
-                .UseHiLo("global")
                 .ValueGeneratedNever();
 
             builder.HasAlternateKey(p => p.AuthId);
